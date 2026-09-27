@@ -84,7 +84,6 @@ ax1.set_xlim(left=0)
 
 ax2 = ax1.twinx()
 ax2.plot(x, create_P_latent(P), "b-o")
-P_latent_labels = ["0", "20", "40", "60", "80", "100", "300"]
 ax2.set_yticks([0, 20, 40, 60, 80, 100, 120])
 ax2.set_yticklabels(P_latent_labels)
 if y_min == -20:
@@ -108,7 +107,7 @@ ax2.text(1, 1.002, "16,2\n1246", transform=ax2.transAxes, ha="right", va="bottom
 ax2.fill_between(x, P_latent, 100, where=(P_latent > 100), interpolate=True, alpha=0.9, color="navy") #superhumid
 ax2.fill_between(x, P_latent, T_mean * 2, where=(P_latent > T_mean * 2), interpolate=True, facecolor="none", hatch="|", edgecolor="navy") #humid
 ax2.fill_between(x, P_latent, T_mean * 2, where=(P_latent < T_mean * 2), interpolate=True, facecolor="none", hatch=".", edgecolor="navy") #arid 
-ax2.fill_between(x, P_latent / 3, P_latent, where=(P_latent / 3 < T_mean), interpolate=True, facecolor="none", hatch="_", edgecolor="navy")
+ax2.fill_between(x, P_latent / 3, P_latent, where=(P_latent / 3 < T_mean), interpolate=True, facecolor="none", hatch="_", edgecolor="navy") #drought
 
 #frosty months
 for i in range(12):
