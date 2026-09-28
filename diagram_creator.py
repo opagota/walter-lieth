@@ -99,8 +99,8 @@ ax1.grid(True)
 
 #labeling
 ax1.text(0, 1.002, "Addisz-Abeba\n2355", transform=ax1.transAxes, ha="left", va="bottom", fontsize=15)
-ax1.text(-0.05, 0.8, "34,4\n17,9", transform=ax1.transAxes, ha="left", va="bottom", fontsize=15)
-ax1.text(-0.05, 0.2, "15,0\n0,0", transform=ax1.transAxes, ha="left", va="bottom", fontsize=15)
+ax1.text(-0.05, 0.8, "34,4\n25,0", transform=ax1.transAxes, ha="left", va="bottom", fontsize=15)
+ax1.text(-0.05, -0.01, "10,0\n0,0", transform=ax1.transAxes, ha="left", va="bottom", fontsize=15)
 ax2.text(1, 1.002, "16,2\n1246", transform=ax2.transAxes, ha="right", va="bottom", fontsize=15)
 
 #aridity
