@@ -73,7 +73,7 @@ if CustomHatch not in matplotlib.hatch._hatch_types:
     matplotlib.hatch._hatch_types.append(CustomHatch)
 
 ##plotting
-fig, ax1 = plt.subplots()
+fig, ax1 = plt.subplots(figsize=(16,10))
 ax1.plot(x, T_mean, "r-o")
 ax1.set_xticks(range(len(x)))
 ax1.set_xticklabels(x_nolabel)
@@ -84,6 +84,7 @@ ax1.set_xlim(left=0)
 
 ax2 = ax1.twinx()
 ax2.plot(x, create_P_latent(P), "b-o")
+P_latent_labels = ["0", "20", "40", "60", "80", "100", "300"]
 ax2.set_yticks([0, 20, 40, 60, 80, 100, 120])
 ax2.set_yticklabels(P_latent_labels)
 if y_min == -20:
@@ -94,7 +95,6 @@ else:
     ax2.set_ylim(0, 120)
 
 plt.hlines(y=0, xmin=0, xmax=12.5, colors="black", lw=1.5)
-fig.tight_layout()
 ax1.grid(True)
 
 #labeling
@@ -107,12 +107,15 @@ ax2.text(1, 1.002, "16,2\n1246", transform=ax2.transAxes, ha="right", va="bottom
 ax2.fill_between(x, P_latent, 100, where=(P_latent > 100), interpolate=True, alpha=0.9, color="navy") #superhumid
 ax2.fill_between(x, P_latent, T_mean * 2, where=(P_latent > T_mean * 2), interpolate=True, facecolor="none", hatch="|", edgecolor="navy") #humid
 ax2.fill_between(x, P_latent, T_mean * 2, where=(P_latent < T_mean * 2), interpolate=True, facecolor="none", hatch=".", edgecolor="navy") #arid 
-ax2.fill_between(x, P_latent / 3, P_latent, where=(P_latent / 3 < T_mean), interpolate=True, facecolor="none", hatch="_", edgecolor="navy") #drought
+ax2.fill_between(x, P_latent / 3, P_latent, where=(P_latent / 3 < T_mean), interpolate=True, facecolor="none", hatch="_", edgecolor="navy")
 
 #frosty months
 for i in range(12):
     if m_daily_mean[i] < 0:
         plt.hlines(y=0, xmin=i, xmax=i + 1, colors="black", lw=8)
 
-
+fig.tight_layout()
+plt.savefig("./Addisz_Abeba_climate.png")
 plt.show()
+
+
