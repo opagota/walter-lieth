@@ -107,7 +107,37 @@ ax2.text(1, 1.002, "16,2\n1246", transform=ax2.transAxes, ha="right", va="bottom
 ax2.fill_between(x, P_latent, 100, where=(P_latent > 100), interpolate=True, alpha=0.9, color="navy") #superhumid
 ax2.fill_between(x, P_latent, T_mean * 2, where=(P_latent > T_mean * 2), interpolate=True, facecolor="none", hatch="|", edgecolor="navy") #humid
 ax2.fill_between(x, P_latent, T_mean * 2, where=(P_latent < T_mean * 2), interpolate=True, facecolor="none", hatch=".", edgecolor="navy") #arid 
-ax2.fill_between(x, P_latent / 3, P_latent, where=(P_latent / 3 < T_mean), interpolate=True, facecolor="none", hatch="_", edgecolor="navy")
+
+##clarify drought conditions - problem: arid period is cut (OCT - JAN)
+P_ext = np.tile(P_latent, 3) #extended period: 3 years
+T_ext = np.tile(T_mean, 3)
+
+arid_ext = P_ext < (T_ext * 2)
+drought_ext = (P_ext / 3) < T_ext
+
+#True(1): arid, False(0): not arid
+#diffs: start of arid period -> diff=1; end of arid period -> diff=-1
+padded_arid = np.concatenate(([False], arid_ext, [False])) #if first/last month is arid
+diffs = np.diff(padded_arid.astype(int))
+
+block_starts = np.where(diffs == 1)[0] #start index
+block_ends = np.where(diffs == -1)[0] - 1 #because where(diffs == -1) is the first month following the end of arid period
+
+final_drought_ext = np.zeros_like(P_ext, dtype=bool)
+
+for start_idx, end_idx in zip(block_starts, block_ends):
+  prev_idx = start_idx - 1 #month before arid period
+  next_idx = end_idx + 1 #month after arid period
+  
+  if prev_idx >= 0 and next_idx < len(P_ext):
+    if drought_ext[prev_idx] and drought_ext[next_idx]: #is drought in the previous AND following month?
+      for idx in range(start_idx, end_idx + 1):
+        if drought_ext[idx]:
+          final_drought_ext[idx] = True
+
+final_drought_mask = final_drought_ext[12:24] #the middle block
+
+ax2.fill_between(x, P_latent / 3, P_latent, where=final_drought_mask, interpolate=True, facecolor="none", hatch="_", edgecolor="navy")
 
 #frosty months
 for i in range(12):
